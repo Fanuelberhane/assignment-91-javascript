@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>promise assignments</title>
+  <style>
+     button:hover {
+    background-color:rgb(247, 247, 112)
+  }
+  </style>
+</head>
+<body style="background-color: aqua;">
+  <h3 style="color: brown;">Delaying ms</h3>
+ 
+  <p id="dlaying1" style="color: red;">delaying...</p>
+  <button onclick="executeDelay()">Delay button</button>
+  <br>
+  <br>
+  
+  <h3 style="color: brown;">Random Numbers</h3>
+  
+  <p id="random1">Random numbers</p>
+  <button onclick="executeFetch()">Random numbers</button>
+
+  <br>
+  <br>
+  
+  <h3 style="color: brown;"> Data entered multiplied</h3>
+  <p id="processdata">process data</p>
+  <button onclick="executeProcess()">Process entered Data</button>
+  
+
+  <br>
+  <br>
+
+  <h3 style="color: brown;">Chain Promises </h3>
+  
+  <p id="fetchprocess">fetch and process data</p>
+
+  <button onclick="executeChain()">Fetch and Process Data</button>
+
+
+  <script>
+
+//question 1
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function executeDelay() {
+      document.getElementById('dlaying1').innerText = "Delay two seconds";
+      await delay(2000); // 2 seconds delay
+      document.getElementById('dlaying1').innerText = "Delayed!";
+    }
+
+//question 2
+
+
+    function fetchData() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const randomNumber = Math.floor(Math.random() * 100) + 1;
+          resolve(randomNumber);
+        }, 2000);
+      });
+    }
+
+    async function executeFetch() {
+      document.getElementById('random1').innerText = "get random numbers from 1 to 100 ";
+      const data = await fetchData();
+      document.getElementById('random1').innerText = `random numbers: ${data}`;
+    }
+
+
+    //question3
+
+    
+    function processData(data) {
+      return new Promise(resolve => {
+        console.log(`Processing data: ${data}`);
+        setTimeout(() => {
+          resolve(data * 2);
+        }, 1000);
+      });
+    }
+
+    async function executeProcess() {
+      const data = 20; // entered data 
+      document.getElementById('processdata').innerText = "Processing data...";
+      const processedData = await processData(data);
+      document.getElementById('processdata').innerText = `Processed data: ${processedData}`;
+    }
+
+
+     
+
+    // question 4
+
+
+    function fetchData() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const randomNumber = Math.floor(Math.random() * 100) + 1;
+          resolve(randomNumber);
+        }, 2000);
+      });
+    }
+
+    function processData(data) {
+      return new Promise(resolve => {
+        console.log(`Processing data: ${data}`);
+        setTimeout(() => {
+          resolve(data * 2);
+        }, 1000);
+      });
+    }
+
+    function executeChain() {
+      document.getElementById('fetchprocess').innerText = "Fetching data...";
+      fetchData()
+        .then(data => {
+          document.getElementById('fetchprocess').innerText = `Fetched data: ${data}. Processing data...`;
+          return processData(data);
+        })
+        .then(processedData => {
+          document.getElementById('fetchprocess').innerText = `Processed data: ${processedData}`;
+        })
+        .catch(error => {
+          console.error(error);
+          document.getElementById('fetchprocess').innerText = "An error occurred.";
+        });
+    }
+
+
+
+
+  </script>
+</body>
+</html>
